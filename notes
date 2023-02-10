@@ -1,0 +1,4 @@
+//This code sets up a basic video chat between two users. The local user's camera and microphone are accessed through the getUserMedia method and the local stream 
+is displayed on the "local-video" element. The remote user's stream is displayed on the "remote-video" element.In order to integrate this code into your B2B marketplace
+website, you'll need to handle the communication between the two peers. You can do this using a server to relay messages between the two peers, or by using a technology 
+like WebSockets to allow the two peers to communicate directly. Here's an example using a Node.js server and WebSockets:
