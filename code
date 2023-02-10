@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>Video Chat</title>
+    <style>
+      #local-video, #remote-video {
+        width: 300px;
+        height: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <video id="local-video" autoplay playsinline></video>
+    <video id="remote-video" autoplay playsinline></video>
+    
+    <script>
+      // get the local and remote video elements
+      const localVideo = document.getElementById('local-video');
+      const remoteVideo = document.getElementById('remote-video');
+      
+      // get the user's camera and microphone
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          localVideo.srcObject = stream;
+          
+          // create a peer connection
+          const peerConnection = new RTCPeerConnection();
+          
+          // add the local stream to the peer connection
+          stream.getTracks().forEach(track => peerConnection.addTrack(track, stream));
+          
+          // when the remote stream arrives, display it on the remote video element
+          peerConnection.ontrack = ({ streams: [remoteStream] }) => {
+            remoteVideo.srcObject = remoteStream;
+          };
+          
+          // handle incoming offers
+          peerConnection.onicecandidate = ({ candidate }) => {
+            if (candidate) {
+              // send the ice candidate to the other peer
+            }
+          };
+          
+          // when the offer is received, set it as the remote description and answer it
+          peerConnection.onnegotiationneeded = async () => {
+            try {
+              const offer = await peerConnection.createOffer();
+              await peerConnection.setLocalDescription(offer);
+              // send the offer to the other peer
+            } catch (error) {
+              console.error(error);
+            }
+          };
+        })
+        .catch(error => console.error(error));
+    </script>
+  </body>
+</html>
